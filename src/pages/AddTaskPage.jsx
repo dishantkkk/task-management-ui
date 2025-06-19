@@ -22,39 +22,41 @@ const AddTaskPage = () => {
   return (
     <>
       <Navbar />
-      <form
-        onSubmit={handleSubmit}
-        className="max-w-lg mx-auto mt-10 space-y-4 bg-white p-6 shadow rounded"
-      >
-        <h2 className="text-2xl font-bold">Add New Task</h2>
-        <input
-          className="w-full border p-2"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-        <textarea
-          className="w-full border p-2"
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-        />
-        <input
-          className="w-full border p-2"
-          type="date"
-          value={dueDate}
-          onChange={(e) => setDueDate(e.target.value)}
-          required
-        />
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded"
+      <div className="max-w-xl mx-auto mt-10 px-4">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white p-6 rounded shadow space-y-4"
         >
-          Add Task
-        </button>
-      </form>
+          <h2 className="text-2xl font-bold text-center text-blue-600">Add New Task</h2>
+          <input
+            className="w-full border p-2 rounded"
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
+          <textarea
+            className="w-full border p-2 rounded"
+            placeholder="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+          />
+          <input
+            className="w-full border p-2 rounded"
+            type="date"
+            value={dueDate}
+            onChange={(e) => setDueDate(e.target.value)}
+            required
+          />
+          <button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white p-2 rounded"
+          >
+            Add Task
+          </button>
+        </form>
+      </div>
     </>
   );
 };

@@ -7,9 +7,7 @@ const TaskListPage = () => {
 
   const fetchTasks = async () => {
     try {
-      const res = await api.get("/tasks", {
-        
-      });
+      const res = await api.get("/tasks");
       setTasks(res.data);
     } catch (err) {
       console.error("Error fetching tasks", err);
@@ -23,23 +21,20 @@ const TaskListPage = () => {
   return (
     <>
       <Navbar />
-      <div className="max-w-2xl mx-auto mt-8">
-        <h1 className="text-2xl font-bold mb-4">Your Tasks</h1>
+      <div className="max-w-4xl mx-auto mt-10 px-4">
+        <h1 className="text-3xl font-bold mb-6 text-center">Your Tasks</h1>
         {tasks.length === 0 ? (
-          <p>No tasks found.</p>
+          <p className="text-center text-gray-600">No tasks found.</p>
         ) : (
-          <ul className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {tasks.map((task) => (
-              <li
-                key={task.id}
-                className="border p-4 rounded shadow bg-white"
-              >
-                <h3 className="text-lg font-semibold">{task.title}</h3>
-                <p className="text-gray-700">{task.description}</p>
-                <p className="text-sm text-gray-500">Due: {task.dueDate}</p>
-              </li>
+              <div key={task.id} className="bg-white p-6 rounded shadow">
+                <h3 className="text-xl font-semibold">{task.title}</h3>
+                <p className="text-gray-700 mt-2">{task.description}</p>
+                <p className="text-sm text-gray-500 mt-1">Due: {task.dueDate}</p>
+              </div>
             ))}
-          </ul>
+          </div>
         )}
       </div>
     </>

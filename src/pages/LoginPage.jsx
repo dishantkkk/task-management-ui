@@ -21,24 +21,30 @@ function LoginPage() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-20 space-y-4">
-    <h1 className="text-4xl text-red-600 font-bold">Tailwind Works!</h1>
-      <h2 className="text-2xl font-bold">Login</h2>
-      <input
-        className="w-full border p-2"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        className="w-full border p-2"
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button className="w-full bg-blue-500 text-white p-2">Login</button>
-    </form>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-300">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white shadow-md rounded-lg p-8 w-full max-w-md"
+      >
+        <h2 className="text-2xl font-bold mb-6 text-center text-blue-600">Login</h2>
+        <input
+          className="w-full border border-gray-300 p-2 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <input
+          className="w-full border border-gray-300 p-2 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded">
+          Login
+        </button>
+      </form>
+    </div>
   );
 }
 
