@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import TaskListPage from "./pages/TaskListPage";
 import AddTaskPage from "./pages/AddTaskPage";
+import EditTaskPage from "./pages/EditTaskPage";
 import PrivateRoute from "./routes/PrivateRoute";
 
 function App() {
@@ -25,6 +26,14 @@ function App() {
               <AddTaskPage />
             </PrivateRoute>
           }
+        />
+        <Route 
+          path="/edit/:id" 
+          element={
+            <PrivateRoute>
+              <EditTaskPage />
+            </PrivateRoute>
+          } 
         />
       </Routes>
     </Router>
