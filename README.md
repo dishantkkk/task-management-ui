@@ -1,12 +1,66 @@
-# React + Vite
+# 📋 Task Management UI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive **React.js frontend** for the Task Management System, built with Tailwind CSS and JWT-based authentication. It integrates with the Spring Boot backend to provide full task CRUD, inline interactions, and a clean user experience.
 
-Currently, two official plugins are available:
+## ⚙️ Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React 18+
+- Tailwind CSS 3+
+- Axios for API calls
+- React Router DOM for navigation
+- JWT-based authentication (via `localStorage`)
+- Backend: Spring Boot (JWT + Role-based Auth)
 
-## Expanding the ESLint configuration
+## 🚀 Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/your-username/task-management-ui.git
+cd task-management-ui
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+# or
+yarn install
+```
+
+### 3. Start the development server
+
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+Visit `http://localhost:5173` in your browser.
+
+## 🔑 Authentication Flow
+
+- JWT token is received after login and stored in `localStorage`
+- Axios interceptor attaches the token to each API request
+- Protected routes are guarded based on login status
+
+## 📦 Features
+
+- ✅ Login with username/password
+- ✅ View tasks (list, view inline)
+- ✅ Add, edit, delete tasks
+- ✅ Toggle flag (completed/uncompleted)
+- ✅ Fully responsive UI
+- ✅ Tailwind styling with dark mode-ready structure
+
+## 🔧 Backend Requirements
+
+Ensure the backend API is running at: `http://localhost:8080/v1/api`
+
+## 🔮 Future Improvements
+
+- Add user registration page
+- Global toast notifications
+- Task filters (date, flag)
+- PWA support and offline mode
+- Unit tests using React Testing Library
