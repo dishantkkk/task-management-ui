@@ -11,6 +11,7 @@ const EditTaskPage = () => {
     title: "",
     description: "",
     dueDate: "",
+    flag: "",
     priority: "MEDIUM",
     status: "PENDING",
   });
@@ -24,6 +25,7 @@ const EditTaskPage = () => {
           ? new Date(dateTime).toISOString().slice(0, 16)
           : "";
         setTask({
+          ...task,
           id: res.data.id,
           title: res.data.title,
           description: res.data.description,
@@ -40,7 +42,6 @@ const EditTaskPage = () => {
   }, [id]);
 
   const handleChange = (e) => {
-    console.log("Changing:", e.target.name, e.target.value);
     setTask({ ...task, [e.target.name]: e.target.value });
   };
 

@@ -16,6 +16,7 @@ const Navbar = () => {
         <Link to="/tasks">Task Manager</Link>
       </div>
       <div className="space-x-4">
+        <Link to="/dashboard" className="text-white hover:text-gray-300">Dashboard</Link>
         <Link to="/tasks" className="hover:underline">
           Tasks
         </Link>

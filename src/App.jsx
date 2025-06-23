@@ -4,6 +4,7 @@ import TaskListPage from "./pages/TaskListPage";
 import AddTaskPage from "./pages/AddTaskPage";
 import EditTaskPage from "./pages/EditTaskPage";
 import PrivateRoute from "./routes/PrivateRoute";
+import DashboardPage from "./pages/DashboardPage";
 
 function App() {
   return (
@@ -34,6 +35,12 @@ function App() {
               <EditTaskPage />
             </PrivateRoute>
           } 
+        />
+        <Route path="/dashboard" element={
+          <PrivateRoute>
+            <DashboardPage />
+          </PrivateRoute>
+        } 
         />
       </Routes>
     </Router>
