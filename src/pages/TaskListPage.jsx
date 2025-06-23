@@ -7,6 +7,9 @@ const TaskListPage = () => {
   const [tasks, setTasks] = useState([]);
   const [expandedTaskId, setExpandedTaskId] = useState(null);
   const [search, setSearch] = useState("");
+  const [priorityFilter, setPriorityFilter] = useState("ALL");
+  const [statusFilter, setStatusFilter] = useState("ALL");
+  const [sortOrder, setSortOrder] = useState("asc");
 
   const fetchTasks = async () => {
     try {
@@ -18,8 +21,7 @@ const TaskListPage = () => {
   };
 
   const handleDelete = async (id) => {
-    const confirm = window.confirm("Are you sure you want to delete this task?");
-    if (!confirm) return;
+    if (!window.confirm("Are you sure you want to delete this task?")) return;
     try {
       await api.delete(`/tasks/${id}`);
       setTasks((prev) => prev.filter((task) => task.id !== id));
@@ -28,17 +30,27 @@ const TaskListPage = () => {
     }
   };
 
-  const toggleCompletion = async (task) => {
+  const toggleFlag = async (task) => {
     try {
-      const updated = { ...task, completed: !task.completed };
-      await api.put(`/tasks/${task.id}`, updated);
+      const payload = {
+        id: task.id,
+        title: task.title,
+        description: task.description,
+        dueDate: task.dueDate,
+        type: "flag",
+        value: task.flagged ? "false" : "true",
+        priority: task.priority || "MEDIUM",
+        status: task.status || "PENDING",
+      };
+
+      await api.put(`/tasks/${task.id}`, payload);
       setTasks((prev) =>
         prev.map((t) =>
-          t.id === task.id ? { ...t, completed: updated.completed } : t
+          t.id === task.id ? { ...t, flagged: !task.flagged } : t
         )
       );
     } catch (err) {
-      console.error("Error toggling completion", err);
+      console.error("Error toggling flag", err);
     }
   };
 
@@ -46,9 +58,25 @@ const TaskListPage = () => {
     setExpandedTaskId((prev) => (prev === id ? null : id));
   };
 
-  const filteredTasks = tasks.filter((task) =>
-    task.title.toLowerCase().includes(search.toLowerCase())
-  );
+  const isDueSoon = (dueDate, hours) => {
+    const now = new Date();
+    const due = new Date(dueDate);
+    return due - now <= hours * 3600 * 1000 && due > now;
+  };
+
+  const filteredTasks = tasks
+    .filter((task) => task.title.toLowerCase().includes(search.toLowerCase()))
+    .filter((task) =>
+      priorityFilter === "ALL" ? true : task.priority === priorityFilter
+    )
+    .filter((task) =>
+      statusFilter === "ALL" ? true : task.status === statusFilter
+    )
+    .sort((a, b) =>
+      sortOrder === "asc"
+        ? new Date(a.dueDate) - new Date(b.dueDate)
+        : new Date(b.dueDate) - new Date(a.dueDate)
+    );
 
   useEffect(() => {
     fetchTasks();
@@ -59,13 +87,46 @@ const TaskListPage = () => {
       <Navbar />
       <div className="max-w-4xl mx-auto mt-10 px-4">
         <h1 className="text-3xl font-bold mb-6 text-center">Your Tasks</h1>
-        <input
-          type="text"
-          placeholder="Search by title"
-          className="w-full border p-2 mb-4"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+
+        {/* Filters */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          <input
+            type="text"
+            placeholder="Search by title"
+            className="border p-2 rounded flex-1"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <select
+            value={priorityFilter}
+            onChange={(e) => setPriorityFilter(e.target.value)}
+            className="border p-2 rounded"
+          >
+            <option value="ALL">All Priorities</option>
+            <option value="LOW">Low</option>
+            <option value="MEDIUM">Medium</option>
+            <option value="HIGH">High</option>
+            <option value="URGENT">Urgent</option>
+          </select>
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="border p-2 rounded"
+          >
+            <option value="ALL">All Status</option>
+            <option value="PENDING">Pending</option>
+            <option value="IN_PROGRESS">In Progress</option>
+            <option value="COMPLETED">Completed</option>
+          </select>
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="border p-2 rounded"
+          >
+            <option value="asc">Due Date ↑</option>
+            <option value="desc">Due Date ↓</option>
+          </select>
+        </div>
 
         {filteredTasks.length === 0 ? (
           <p className="text-center text-gray-600">No tasks found.</p>
@@ -74,22 +135,42 @@ const TaskListPage = () => {
             {filteredTasks.map((task) => (
               <div
                 key={task.id}
-                className="bg-white p-6 rounded shadow relative"
+                className={`bg-white p-6 rounded shadow relative ${
+                  isDueSoon(task.dueDate, 24)
+                    ? "border-l-4 border-red-500"
+                    : isDueSoon(task.dueDate, 72)
+                    ? "border-l-4 border-yellow-400"
+                    : ""
+                }`}
               >
                 <h3 className="text-xl font-semibold flex justify-between items-center">
                   {task.title}
                   <button
-                    onClick={() => toggleCompletion(task)}
+                    onClick={() => toggleFlag(task)}
                     className={`px-2 py-1 rounded text-sm ${
-                      task.completed
+                      task.flagged
                         ? "bg-green-500 text-white"
                         : "bg-gray-300 text-black"
                     }`}
                   >
-                    {task.completed ? "Unflag" : "Flag"}
+                    {task.flagged ? "Unflag" : "Flag"}
                   </button>
                 </h3>
+
                 <p className="text-sm text-gray-500">Due: {task.dueDate}</p>
+                <span
+                  className={`text-xs font-bold px-2 py-1 rounded ${
+                    task.priority === "URGENT"
+                      ? "bg-red-200 text-red-800"
+                      : task.priority === "HIGH"
+                      ? "bg-orange-200 text-orange-800"
+                      : task.priority === "MEDIUM"
+                      ? "bg-yellow-200 text-yellow-800"
+                      : "bg-green-200 text-green-800"
+                  }`}
+                >
+                  {task.priority}
+                </span>
 
                 <div className="mt-4 flex gap-4">
                   <Link
@@ -115,16 +196,6 @@ const TaskListPage = () => {
                         className="bg-red-500 text-white px-3 py-1 rounded"
                       >
                         Delete
-                      </button>
-                      <button
-                        onClick={() => toggleCompletion(task)}
-                        className={`${
-                          task.completed
-                            ? "bg-gray-500"
-                            : "bg-green-500"
-                        } text-white px-3 py-1 rounded`}
-                      >
-                        {task.completed ? "Mark Incomplete" : "Mark Complete"}
                       </button>
                     </div>
                   </div>
