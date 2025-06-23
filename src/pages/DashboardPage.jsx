@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
-import Navbar from "../components/Navbar";
 
 const DashboardPage = () => {
   const [tasks, setTasks] = useState([]);
@@ -18,44 +17,41 @@ const DashboardPage = () => {
   }, []);
 
   const total = tasks.length;
-  const byStatus = (status) => tasks.filter(t => t.status === status).length;
-  const byPriority = (priority) => tasks.filter(t => t.priority === priority).length;
+  const byStatus = (status) => tasks.filter((t) => t.status === status).length;
+  const byPriority = (priority) => tasks.filter((t) => t.priority === priority).length;
 
   return (
-    <>
-      <Navbar />
-      <div className="max-w-4xl mx-auto mt-10 px-4">
-        <h1 className="text-3xl font-bold mb-6 text-center">Task Dashboard</h1>
+    <div className="max-w-4xl mx-auto mt-10 px-4">
+      <h1 className="text-3xl font-bold mb-6 text-center text-gray-800 dark:text-white">Task Dashboard</h1>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-          <div className="bg-blue-100 p-4 rounded shadow">
-            <h2 className="text-lg font-bold">Total Tasks</h2>
-            <p className="text-2xl">{total}</p>
-          </div>
-          <div className="bg-green-100 p-4 rounded shadow">
-            <h2 className="text-lg font-bold">Completed</h2>
-            <p className="text-2xl">{byStatus("COMPLETED")}</p>
-          </div>
-          <div className="bg-yellow-100 p-4 rounded shadow">
-            <h2 className="text-lg font-bold">Pending</h2>
-            <p className="text-2xl">{byStatus("PENDING")}</p>
-          </div>
-          <div className="bg-orange-100 p-4 rounded shadow">
-            <h2 className="text-lg font-bold">In Progress</h2>
-            <p className="text-2xl">{byStatus("IN_PROGRESS")}</p>
-          </div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <div className="bg-blue-100 dark:bg-blue-900 p-4 rounded shadow">
+          <h2 className="text-lg font-bold text-gray-800 dark:text-white">Total Tasks</h2>
+          <p className="text-2xl text-gray-900 dark:text-blue-200">{total}</p>
         </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {["LOW", "MEDIUM", "HIGH", "URGENT"].map((priority) => (
-            <div key={priority} className="bg-gray-100 p-4 rounded shadow">
-              <h3 className="text-sm font-semibold">{priority}</h3>
-              <p className="text-xl">{byPriority(priority)}</p>
-            </div>
-          ))}
+        <div className="bg-green-100 dark:bg-green-900 p-4 rounded shadow">
+          <h2 className="text-lg font-bold text-gray-800 dark:text-white">Completed</h2>
+          <p className="text-2xl text-gray-900 dark:text-green-200">{byStatus("COMPLETED")}</p>
+        </div>
+        <div className="bg-yellow-100 dark:bg-yellow-900 p-4 rounded shadow">
+          <h2 className="text-lg font-bold text-gray-800 dark:text-white">Pending</h2>
+          <p className="text-2xl text-gray-900 dark:text-yellow-200">{byStatus("PENDING")}</p>
+        </div>
+        <div className="bg-orange-100 dark:bg-orange-900 p-4 rounded shadow">
+          <h2 className="text-lg font-bold text-gray-800 dark:text-white">In Progress</h2>
+          <p className="text-2xl text-gray-900 dark:text-orange-200">{byStatus("IN_PROGRESS")}</p>
         </div>
       </div>
-    </>
+
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        {["LOW", "MEDIUM", "HIGH", "URGENT"].map((priority) => (
+          <div key={priority} className="bg-gray-100 dark:bg-gray-800 p-4 rounded shadow">
+            <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200">{priority}</h3>
+            <p className="text-xl text-gray-900 dark:text-white">{byPriority(priority)}</p>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 

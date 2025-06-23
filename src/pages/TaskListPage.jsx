@@ -12,6 +12,7 @@ const TaskListPage = () => {
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [sortOrder, setSortOrder] = useState("asc");
   const [selectedTask, setSelectedTask] = useState(null);
+  const [message, setMessage] = useState("");
 
   const fetchTasks = async () => {
     try {
@@ -27,14 +28,19 @@ const TaskListPage = () => {
   }, []);
 
   const handleFlag = async (task) => {
+    const updatedTasks = tasks.map((t) =>
+      t.id === task.id ? { ...t, flag: task.flag === "Flagged" ? "Unflagged" : "Flagged" } : t
+    );
+    setTasks(updatedTasks);
+
     try {
       const payload = {
         ...task,
         type: "flag",
-        value: task.flag == "Flagged" ? "Unflagged" : "Flagged",
+        value: task.flag === "Flagged" ? "Unflagged" : "Flagged",
       };
       await api.put(`/tasks/${task.id}`, payload);
-      await fetchTasks();
+      fetchTasks();
     } catch (err) {
       console.error("Error toggling flag", err);
     }
@@ -44,8 +50,10 @@ const TaskListPage = () => {
     if (!window.confirm("Are you sure you want to delete this task?")) return;
     try {
       await api.delete(`/tasks/${id}`);
+      setMessage("✅ Task deleted");
       fetchTasks();
       setSelectedTask(null);
+      setTimeout(() => setMessage(""), 3000);
     } catch (err) {
       console.error("Error deleting task", err);
     }
@@ -59,8 +67,10 @@ const TaskListPage = () => {
         value: "COMPLETED",
         status: "COMPLETED",
       });
+      setMessage("✅ Task marked complete");
       fetchTasks();
       setSelectedTask(null);
+      setTimeout(() => setMessage(""), 3000);
     } catch (err) {
       console.error("Error marking complete", err);
     }
@@ -88,7 +98,11 @@ const TaskListPage = () => {
 
   return (
     <>
-      <Navbar />
+      {message && (
+        <div className="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow z-50">
+          {message}
+        </div>
+      )}
       <div className="max-w-4xl mx-auto mt-10 px-4">
         <h1 className="text-3xl font-bold mb-6 text-center">Your Tasks</h1>
 

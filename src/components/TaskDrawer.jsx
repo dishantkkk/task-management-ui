@@ -5,7 +5,6 @@ const TaskDrawer = ({ task, onClose, onDelete, onMarkComplete }) => {
 
   useEffect(() => {
     if (task) {
-      // Trigger enter animation
       setTimeout(() => setIsVisible(true), 10);
     } else {
       setIsVisible(false);
@@ -18,18 +17,16 @@ const TaskDrawer = ({ task, onClose, onDelete, onMarkComplete }) => {
     setIsVisible(false);
     setTimeout(() => {
       onClose();
-    }, 500); // Match with duration
+    }, 500);
   };
 
   return (
     <>
-      {/* Blurred Background */}
       <div
         className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40"
         onClick={handleClose}
       />
 
-      {/* Drawer with smooth transition */}
       <div
         className={`fixed right-0 top-0 h-full w-[500px] bg-white shadow-lg z-50 transform transition-transform duration-500 ${
           isVisible ? "translate-x-0" : "translate-x-full"
@@ -47,11 +44,9 @@ const TaskDrawer = ({ task, onClose, onDelete, onMarkComplete }) => {
           </div>
 
           <p className="text-gray-700">{task.description}</p>
-
           <p className="text-sm text-gray-500">
-            <strong>Due:</strong> {task.dueDate}
+            <strong>Due:</strong> {new Date(task.dueDate).toLocaleString()}
           </p>
-
           <p className="text-sm text-gray-500">
             <strong>Assigned To:</strong> {task.assignedToUsername || "You"}
           </p>

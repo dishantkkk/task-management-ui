@@ -1,4 +1,3 @@
-// src/components/CalendarView.jsx
 import React, { useState } from "react";
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
@@ -14,6 +13,7 @@ const CalendarView = ({ tasks, onDateSelect }) => {
   const tileContent = ({ date, view }) => {
     if (view === "month") {
       const hasTask = tasks.some((task) => {
+        if (!task.dueDate) return false;
         const dueDate = new Date(task.dueDate);
         return dueDate.toDateString() === date.toDateString();
       });
@@ -24,12 +24,23 @@ const CalendarView = ({ tasks, onDateSelect }) => {
     }
   };
 
+  const tileClassName = ({ date, view }) => {
+    if (
+      view === "month" &&
+      selectedDate &&
+      date.toDateString() === selectedDate.toDateString()
+    ) {
+      return "bg-blue-100 text-blue-800 font-semibold rounded";
+    }
+  };
+
   return (
     <div className="mb-6 bg-white p-4 shadow rounded">
       <Calendar
         value={selectedDate}
         onChange={handleDateChange}
         tileContent={tileContent}
+        tileClassName={tileClassName}
       />
     </div>
   );
