@@ -13,7 +13,7 @@ function LoginPage() {
     e.preventDefault();
     try {
       const res = await api.post("/auth/login", { username, password });
-      login(res.data.token);
+      login(res.data.token, res.data.role);
       navigate("/tasks");
     } catch (err) {
       console.error("Login failed", err);

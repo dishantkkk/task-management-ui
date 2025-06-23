@@ -11,49 +11,52 @@ const TaskCard = ({ task, onFlag, onView, isDueSoon }) => {
           : ""
       }`}
     >
-      <h3 className="text-xl font-semibold flex justify-between items-center">
-        {task.title}
-        <button
-          onClick={() => onFlag(task)}
-          className={`px-2 py-1 rounded text-sm ${
-            task.flag == "true"
-              ? "bg-green-500 text-white"
-              : "bg-gray-300 text-black"
-          }`}
-        >
-          {task.flag == "true" ? "Unflag" : "Flag"}
-        </button>
-      </h3>
-
-      <p className="text-sm text-gray-500">Due: {task.dueDate}</p>
-      <span
-        className={`text-xs font-bold px-2 py-1 rounded ${
-          task.priority === "URGENT"
-            ? "bg-red-200 text-red-800"
-            : task.priority === "HIGH"
-            ? "bg-orange-200 text-orange-800"
-            : task.priority === "MEDIUM"
-            ? "bg-yellow-200 text-yellow-800"
-            : "bg-green-200 text-green-800"
+    <h3 className="text-xl font-semibold flex justify-between items-center">
+    {task.title}
+    <button
+        onClick={() => onFlag(task)}
+        className={`px-2 py-1 rounded text-sm ${
+        task.flag == "Flagged"
+            ? "bg-green-500 text-white"
+            : "bg-gray-300 text-black"
         }`}
-      >
-        {task.priority}
-      </span>
+    >
+        {task.flag == "Flagged" ? "Unflag" : "Flag"}
+    </button>
+    </h3>
 
-      <div className="mt-4 flex gap-4">
-        <Link
-          to={`/edit/${task.id}`}
-          className="text-blue-600 hover:underline text-sm"
-        >
-          Edit
-        </Link>
-        <button
-          onClick={() => onView(task)}
-          className="text-indigo-600 hover:underline text-sm"
-        >
-          View
-        </button>
-      </div>
+    <p className="text-sm text-gray-500">Due: {task.dueDate}</p>
+    <p className="text-sm text-gray-500">
+        Assigned To: {task.assignedToUsername || "You"}
+    </p>
+    <span
+    className={`text-xs font-bold px-2 py-1 rounded ${
+        task.priority === "URGENT"
+        ? "bg-red-200 text-red-800"
+        : task.priority === "HIGH"
+        ? "bg-orange-200 text-orange-800"
+        : task.priority === "MEDIUM"
+        ? "bg-yellow-200 text-yellow-800"
+        : "bg-green-200 text-green-800"
+    }`}
+    >
+        {task.priority}
+    </span>
+
+    <div className="mt-4 flex gap-4">
+    <Link
+        to={`/edit/${task.id}`}
+        className="text-blue-600 hover:underline text-sm"
+    >
+        Edit
+    </Link>
+    <button
+        onClick={() => onView(task)}
+        className="text-indigo-600 hover:underline text-sm"
+    >
+        View
+    </button>
+    </div>
     </div>
   );
 };

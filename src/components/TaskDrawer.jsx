@@ -52,6 +52,10 @@ const TaskDrawer = ({ task, onClose, onDelete, onMarkComplete }) => {
             <strong>Due:</strong> {task.dueDate}
           </p>
 
+          <p className="text-sm text-gray-500">
+            <strong>Assigned To:</strong> {task.assignedToUsername || "You"}
+          </p>
+
           <p className="text-sm">
             <strong>Priority:</strong>{" "}
             <span

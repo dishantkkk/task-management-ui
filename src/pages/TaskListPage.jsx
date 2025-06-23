@@ -31,7 +31,7 @@ const TaskListPage = () => {
       const payload = {
         ...task,
         type: "flag",
-        value: task.flag == "true" ? "false" : "true",
+        value: task.flag == "Flagged" ? "Unflagged" : "Flagged",
       };
       await api.put(`/tasks/${task.id}`, payload);
       await fetchTasks();

@@ -15,6 +15,30 @@ const EditTaskPage = () => {
     priority: "MEDIUM",
     status: "PENDING",
   });
+  const [users, setUsers] = useState([]);
+  const [assignedTo, setAssignedTo] = useState("");
+  const userRole = localStorage.getItem("role");
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (userRole === "ADMIN") {
+      const fetchUsers = async () => {
+        try {
+          const res = await api.get("/users", {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+
+          setUsers(res.data);
+        } catch (err) {
+          console.error("Failed to fetch users", err);
+        }
+      };
+
+      fetchUsers(); // call the async function
+    }
+  }, [userRole, token]);
 
   useEffect(() => {
     const fetchTask = async () => {
@@ -57,6 +81,7 @@ const EditTaskPage = () => {
         value: task.status,
         priority: task.priority,
         status: task.status,
+        assignedToId: userRole === "ADMIN" && assignedTo ? assignedTo : undefined,
       };
 
       await api.put(`/tasks/${id}`, updateRequest);
@@ -75,6 +100,23 @@ const EditTaskPage = () => {
           className="bg-white p-6 rounded shadow space-y-4"
         >
           <h2 className="text-2xl font-bold text-center text-blue-600">Edit Task</h2>
+
+          {userRole === "ADMIN" && (
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Assign To</label>
+              <select
+                value={assignedTo}
+                onChange={(e) => setAssignedTo(e.target.value)}
+                className="w-full border border-gray-300 rounded px-2 py-1"
+              >
+                <option value="">-- Select User --</option>
+                {users.map(user => (
+                  <option key={user.id} value={user.id}>{user.username}</option>
+                ))}
+              </select>
+            </div>
+          )}
+
 
           <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
           <input
