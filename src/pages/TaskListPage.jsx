@@ -105,33 +105,34 @@ const TaskListPage = () => {
       )}
       <div className="max-w-4xl mx-auto mt-10 px-4">
         <h1 className="text-3xl font-bold mb-6 text-center">Your Tasks</h1>
+        <div className="bg-white dark:bg-gray-800 p-4 rounded shadow text-black dark:text-white">
+          <TaskFilters
+            search={search}
+            setSearch={setSearch}
+            priorityFilter={priorityFilter}
+            setPriorityFilter={setPriorityFilter}
+            statusFilter={statusFilter}
+            setStatusFilter={setStatusFilter}
+            sortOrder={sortOrder}
+            setSortOrder={setSortOrder}
+          />
 
-        <TaskFilters
-          search={search}
-          setSearch={setSearch}
-          priorityFilter={priorityFilter}
-          setPriorityFilter={setPriorityFilter}
-          statusFilter={statusFilter}
-          setStatusFilter={setStatusFilter}
-          sortOrder={sortOrder}
-          setSortOrder={setSortOrder}
-        />
-
-        {filteredTasks.length === 0 ? (
-          <p className="text-center text-gray-600">No tasks found.</p>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {filteredTasks.map((task) => (
-              <TaskCard
-                key={task.id}
-                task={task}
-                onFlag={handleFlag}
-                onView={setSelectedTask}
-                isDueSoon={isDueSoon}
-              />
-            ))}
-          </div>
-        )}
+          {filteredTasks.length === 0 ? (
+            <p className="text-center text-gray-600">No tasks found.</p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 ">
+              {filteredTasks.map((task) => (
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  onFlag={handleFlag}
+                  onView={setSelectedTask}
+                  isDueSoon={isDueSoon}
+                />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       <TaskDrawer

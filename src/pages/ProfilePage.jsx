@@ -40,11 +40,10 @@ const ProfilePage = () => {
 
         {message.text && (
           <div
-            className={`mb-4 px-4 py-2 rounded text-sm font-medium ${
-              message.type === "success"
+            className={`mb-4 px-4 py-2 rounded text-sm font-medium ${message.type === "success"
                 ? "bg-green-100 text-green-800 dark:bg-green-200"
                 : "bg-red-100 text-red-800 dark:bg-red-300"
-            }`}
+              }`}
           >
             {message.text}
           </div>

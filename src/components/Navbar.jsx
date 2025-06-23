@@ -13,13 +13,17 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
   };
 
   return (
+
     <nav className="bg-white dark:bg-gray-900 shadow text-gray-800 dark:text-white">
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
         <Link to="/" className="text-2xl font-bold">Task Manager</Link>
 
         <div className="flex items-center gap-4">
-          <button onClick={toggleDarkMode}>
-            {darkMode ? "☀️ Light" : "🌙 Dark"}
+          <button
+            onClick={() => toggleDarkMode(!darkMode)}
+            className="px-3 py-1 rounded bg-gray-200 dark:bg-gray-700"
+          >
+            {darkMode ? "🌞 Light Mode" : "🌙 Dark Mode"}
           </button>
 
           <div className="hidden md:flex items-center gap-4">
