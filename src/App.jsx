@@ -1,42 +1,89 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
-import LoginPage from "./pages/LoginPage";
-import TaskListPage from "./pages/TaskListPage";
-import AddTaskPage from "./pages/AddTaskPage";
-import EditTaskPage from "./pages/EditTaskPage";
-import PrivateRoute from "./routes/PrivateRoute";
-import DashboardPage from "./pages/DashboardPage";
-import ProfilePage from "./pages/ProfilePage";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
+import { useEffect, Suspense, lazy } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import Layout from "./components/Layout";
-import HomePage from "./pages/HomePage"
+import PrivateRoute from "./routes/PrivateRoute";
+
+// Lazy-loaded pages
+const HomePage = lazy(() => import("./pages/HomePage"));
+const LoginPage = lazy(() => import("./pages/LoginPage"));
+const RegisterPage = lazy(() => import("./pages/RegisterPage"));
+const TaskListPage = lazy(() => import("./pages/TaskListPage"));
+const AddTaskPage = lazy(() => import("./pages/AddTaskPage"));
+const EditTaskPage = lazy(() => import("./pages/EditTaskPage"));
+const DashboardPage = lazy(() => import("./pages/DashboardPage"));
+const ProfilePage = lazy(() => import("./pages/ProfilePage"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
+
+// Page transition wrapper
+const AnimatedRoutes = () => {
+  const location = useLocation();
+
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={location.pathname}
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -12 }}
+        transition={{ duration: 0.2, ease: "easeInOut" }}
+      >
+        <Suspense
+          fallback={
+            <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
+              <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-blue-600"></div>
+            </div>
+          }
+        >
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route
+              path="/dashboard"
+              element={<PrivateRoute><DashboardPage /></PrivateRoute>}
+            />
+            <Route
+              path="/tasks"
+              element={<PrivateRoute><TaskListPage /></PrivateRoute>}
+            />
+            <Route
+              path="/add-task"
+              element={<PrivateRoute><AddTaskPage /></PrivateRoute>}
+            />
+            <Route
+              path="/edit/:id"
+              element={<PrivateRoute><EditTaskPage /></PrivateRoute>}
+            />
+            <Route
+              path="/profile"
+              element={<PrivateRoute><ProfilePage /></PrivateRoute>}
+            />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </Suspense>
+      </motion.div>
+    </AnimatePresence>
+  );
+};
 
 const App = () => {
   useEffect(() => {
-    // Initialize dark mode from localStorage
     const theme = localStorage.getItem("theme");
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    document.documentElement.classList.toggle("dark", theme === "dark");
   }, []);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 text-black dark:text-white transition-colors">
-      <Router>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/tasks" element={<PrivateRoute><TaskListPage /></PrivateRoute>} />
-            <Route path="/add-task" element={<PrivateRoute><AddTaskPage /></PrivateRoute>} />
-            <Route path="/edit/:id" element={<PrivateRoute><EditTaskPage /></PrivateRoute>} />
-            <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
-            <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
-          </Routes>
-        </Layout>
-      </Router>
-    </div>
+    <Router>
+      <Layout>
+        <AnimatedRoutes />
+      </Layout>
+    </Router>
   );
 };
 

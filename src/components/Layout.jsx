@@ -20,8 +20,7 @@ export default function Layout({ children }) {
   return (
     <div className="min-h-screen bg-white text-black dark:bg-gray-900 dark:text-white transition-colors duration-300">
       <Navbar darkMode={darkMode} toggleDarkMode={setDarkMode} />
-      <main className="max-w-7xl mx-auto p-4">{children}</main>
-
+      <main className="min-h-[calc(100vh-4rem)] pt-16">{children}</main>
     </div>
   );
 }

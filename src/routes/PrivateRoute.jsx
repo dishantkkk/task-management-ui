@@ -6,7 +6,6 @@ const PrivateRoute = ({ children }) => {
   const location = useLocation();
 
   if (!token) {
-    // redirect to login with return path
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
