@@ -19,6 +19,8 @@ const EditTaskPage = lazy(() => import("./pages/EditTaskPage"));
 const DashboardPage = lazy(() => import("./pages/DashboardPage"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
+const VerifyPage = lazy(() =>  import("./pages/VerifyPage"));
+const ResendVerificationPage = lazy(() =>  import("./pages/ResendVerificationPage"));
 
 // Page transition wrapper
 const AnimatedRoutes = () => {
@@ -44,6 +46,8 @@ const AnimatedRoutes = () => {
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/verify" element={<VerifyPage />} />
+            <Route path="/resend-verification" element={<ResendVerificationPage />} />
             <Route
               path="/dashboard"
               element={<PrivateRoute><DashboardPage /></PrivateRoute>}

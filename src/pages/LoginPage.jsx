@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import api from "../services/api";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const LoginPage = () => {
-  const [username, setUsername] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const { login } = useAuth();
@@ -14,12 +14,22 @@ const LoginPage = () => {
     e.preventDefault();
     setErrorMsg("");
     try {
-      const res = await api.post("/auth/login", { username, password });
-      login(res.data.token, res.data.role);
+      const res = await api.post("/auth/login", {
+        usernameOrEmail: identifier,
+        password,
+      });
+
+      // Store token, username, role in auth context/localStorage
+      login(res.data.token, res.data.username, res.data.role);
       navigate("/tasks");
     } catch (err) {
-      console.error("Login failed", err);
-      setErrorMsg("Invalid username or password");
+      const msg = err.response?.data;
+      if (msg === "Email not verified") {
+        setErrorMsg("Please verify your email. Check inbox or resend link.");
+      } else {
+        console.error("Login failed", err);
+        setErrorMsg("Invalid username or password");
+      }
     }
   };
 
@@ -44,15 +54,20 @@ const LoginPage = () => {
             </div>
           )}
 
+          {errorMsg === "Please verify your email. Check inbox or resend link." && (
+            <ResendLink identifier={identifier} />
+          )}
+
+
           <form onSubmit={handleSubmit}>
             <label className="block text-sm font-medium mb-1 dark:text-gray-300">
-              Username
+              Username or Email
             </label>
             <input
               className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-800 dark:text-white p-2 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              placeholder="Enter your username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter your username or email"
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
               required
             />
 
@@ -89,3 +104,41 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
+
+const ResendLink = ({ identifier }) => {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchEmail = async () => {
+      if (identifier.includes("@")) {
+        setEmail(identifier);
+        setLoading(false);
+      } else {
+        try {
+          const res = await api.get(`/auth/email-by-username?username=${identifier}`);
+          setEmail(res.data.email);
+        } catch {
+          setEmail("");
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchEmail();
+  }, [identifier]);
+
+  if (loading) return <p className="text-sm text-gray-500">Loading...</p>;
+  if (!email) return <p className="text-sm text-red-500">Could not find email for verification.</p>;
+
+  return (
+    <Link
+      to={`/resend-verification?email=${email}`}
+      className="text-blue-600 hover:underline text-sm"
+    >
+      Resend Verification Email
+    </Link>
+  );
+};
