@@ -1,14 +1,25 @@
 import { useState, useEffect } from "react";
 import api from "../services/api";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import ResendLink from "../components/ResendLink";
 
 const LoginPage = () => {
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
+
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.message) {
+      setSuccessMsg(location.state.message);
+      window.history.replaceState({}, document.title); // clear after showing once
+    }
+  }, [location.state]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,7 +30,6 @@ const LoginPage = () => {
         password,
       });
 
-      // Store token, username, role in auth context/localStorage
       login(res.data.token, res.data.username, res.data.role);
       navigate("/tasks");
     } catch (err) {
@@ -48,16 +58,24 @@ const LoginPage = () => {
             Login to Your Account
           </h2>
 
+          {/* Success Message */}
+          {successMsg && (
+            <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mb-4 text-sm dark:bg-green-200">
+              {successMsg}
+            </div>
+          )}
+
+          {/* Error Message */}
           {errorMsg && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4 text-sm dark:bg-red-200">
               {errorMsg}
             </div>
           )}
 
+          {/* Resend Link */}
           {errorMsg === "Please verify your email. Check inbox or resend link." && (
             <ResendLink identifier={identifier} />
           )}
-
 
           <form onSubmit={handleSubmit}>
             <label className="block text-sm font-medium mb-1 dark:text-gray-300">
@@ -97,6 +115,11 @@ const LoginPage = () => {
               Register
             </Link>
           </p>
+          <p className="text-sm mt-2 text-center">
+            <Link to="/forgot-password" className="text-blue-500 hover:underline">
+              Forgot password?
+            </Link>
+          </p>
         </div>
       </div>
     </div>
@@ -104,41 +127,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-
-
-const ResendLink = ({ identifier }) => {
-  const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchEmail = async () => {
-      if (identifier.includes("@")) {
-        setEmail(identifier);
-        setLoading(false);
-      } else {
-        try {
-          const res = await api.get(`/auth/email-by-username?username=${identifier}`);
-          setEmail(res.data.email);
-        } catch {
-          setEmail("");
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchEmail();
-  }, [identifier]);
-
-  if (loading) return <p className="text-sm text-gray-500">Loading...</p>;
-  if (!email) return <p className="text-sm text-red-500">Could not find email for verification.</p>;
-
-  return (
-    <Link
-      to={`/resend-verification?email=${email}`}
-      className="text-blue-600 hover:underline text-sm"
-    >
-      Resend Verification Email
-    </Link>
-  );
-};

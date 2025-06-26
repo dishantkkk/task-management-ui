@@ -21,6 +21,8 @@ const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 const VerifyPage = lazy(() =>  import("./pages/VerifyPage"));
 const ResendVerificationPage = lazy(() =>  import("./pages/ResendVerificationPage"));
+const ForgotPasswordPage = lazy(() =>import("./pages/ForgotPasswordPage"));
+const ResetPasswordPage = lazy(() => import("./pages/ResetPasswordPage"));
 
 // Page transition wrapper
 const AnimatedRoutes = () => {
@@ -47,6 +49,8 @@ const AnimatedRoutes = () => {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/verify" element={<VerifyPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
             <Route path="/resend-verification" element={<ResendVerificationPage />} />
             <Route
               path="/dashboard"
