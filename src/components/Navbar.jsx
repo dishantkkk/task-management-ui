@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
 
 const Navbar = ({ darkMode, toggleDarkMode }) => {
-  const { token, logout } = useAuth();
+  const { token, logout, role } = useAuth(); // ✅ added role
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -30,16 +30,23 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
           <div className="hidden md:flex items-center gap-4 text-sm font-medium">
             {token ? (
               <>
-                <Link to="/dashboard">Dashboard</Link>
-                <Link to="/tasks">Tasks</Link>
-                <Link to="/add-task">Add Task</Link>
-                <Link to="/profile">Profile</Link>
+                {role === "ADMIN" && (
+                  <>
+                    <Link to="/admin" className="hover:text-blue-500">Admin Dashboard</Link>
+                    <Link to="/admin/users" className="hover:text-blue-500">Users</Link>
+                    <Link to="/admin/tasks" className="hover:text-blue-500">Tasks</Link>
+                  </>
+                )}
+                <Link to="/dashboard" className="hover:text-blue-500">Dashboard</Link>
+                <Link to="/tasks" className="hover:text-blue-500">Tasks</Link>
+                <Link to="/add-task" className="hover:text-blue-500">Add Task</Link>
+                <Link to="/profile" className="hover:text-blue-500">Profile</Link>
                 <button onClick={handleLogout} className="text-red-500">Logout</button>
               </>
             ) : (
               <>
-                <Link to="/login">Login</Link>
-                <Link to="/register">Register</Link>
+                <Link to="/login" className="hover:text-blue-500">Login</Link>
+                <Link to="/register" className="hover:text-blue-500">Register</Link>
               </>
             )}
           </div>
@@ -54,16 +61,23 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
         <div className="md:hidden px-4 pb-4 space-y-2 text-sm font-medium">
           {token ? (
             <>
-              <Link to="/dashboard">Dashboard</Link>
-              <Link to="/tasks">Tasks</Link>
-              <Link to="/add-task">Add Task</Link>
-              <Link to="/profile">Profile</Link>
+              {role === "ADMIN" && (
+                <>
+                  <Link to="/admin" onClick={() => setMenuOpen(false)}>Admin Dashboard</Link>
+                  <Link to="/admin/users" onClick={() => setMenuOpen(false)}>Users</Link>
+                  <Link to="/admin/tasks" onClick={() => setMenuOpen(false)}>Tasks</Link>
+                </>
+              )}
+              <Link to="/dashboard" onClick={() => setMenuOpen(false)}>Dashboard</Link>
+              <Link to="/tasks" onClick={() => setMenuOpen(false)}>Tasks</Link>
+              <Link to="/add-task" onClick={() => setMenuOpen(false)}>Add Task</Link>
+              <Link to="/profile" onClick={() => setMenuOpen(false)}>Profile</Link>
               <button onClick={handleLogout} className="text-red-500">Logout</button>
             </>
           ) : (
             <>
-              <Link to="/login">Login</Link>
-              <Link to="/register">Register</Link>
+              <Link to="/login" onClick={() => setMenuOpen(false)}>Login</Link>
+              <Link to="/register" onClick={() => setMenuOpen(false)}>Register</Link>
             </>
           )}
         </div>

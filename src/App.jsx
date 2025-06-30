@@ -8,6 +8,7 @@ import { useEffect, Suspense, lazy } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Layout from "./components/Layout";
 import PrivateRoute from "./routes/PrivateRoute";
+import AdminRoute from "./routes/AdminRoute";
 
 // Lazy-loaded pages
 const HomePage = lazy(() => import("./pages/HomePage"));
@@ -19,10 +20,13 @@ const EditTaskPage = lazy(() => import("./pages/EditTaskPage"));
 const DashboardPage = lazy(() => import("./pages/DashboardPage"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
-const VerifyPage = lazy(() =>  import("./pages/VerifyPage"));
-const ResendVerificationPage = lazy(() =>  import("./pages/ResendVerificationPage"));
-const ForgotPasswordPage = lazy(() =>import("./pages/ForgotPasswordPage"));
+const VerifyPage = lazy(() => import("./pages/VerifyPage"));
+const ResendVerificationPage = lazy(() => import("./pages/ResendVerificationPage"));
+const ForgotPasswordPage = lazy(() => import("./pages/ForgotPasswordPage"));
 const ResetPasswordPage = lazy(() => import("./pages/ResetPasswordPage"));
+const AdminDashboardPage = lazy(() => import("./pages/admin/AdminDashboardPage"));
+const AdminUsersPage = lazy(() => import("./pages/admin/AdminUsersPage"));
+const AdminTasksPage = lazy(() => import("./pages/admin/AdminTasksPage"));
 
 // Page transition wrapper
 const AnimatedRoutes = () => {
@@ -52,26 +56,20 @@ const AnimatedRoutes = () => {
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
             <Route path="/resend-verification" element={<ResendVerificationPage />} />
-            <Route
-              path="/dashboard"
-              element={<PrivateRoute><DashboardPage /></PrivateRoute>}
-            />
-            <Route
-              path="/tasks"
-              element={<PrivateRoute><TaskListPage /></PrivateRoute>}
-            />
-            <Route
-              path="/add-task"
-              element={<PrivateRoute><AddTaskPage /></PrivateRoute>}
-            />
-            <Route
-              path="/edit/:id"
-              element={<PrivateRoute><EditTaskPage /></PrivateRoute>}
-            />
-            <Route
-              path="/profile"
-              element={<PrivateRoute><ProfilePage /></PrivateRoute>}
-            />
+            
+            {/* ✅ Admin protected routes */}
+            <Route path="/admin" element={<AdminRoute><AdminDashboardPage /></AdminRoute>} />
+            <Route path="/admin/users" element={<AdminRoute><AdminUsersPage /></AdminRoute>} />
+            <Route path="/admin/tasks" element={<AdminRoute><AdminTasksPage /></AdminRoute>} />
+
+            {/* ✅ Authenticated routes */}
+            <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
+            <Route path="/tasks" element={<PrivateRoute><TaskListPage /></PrivateRoute>} />
+            <Route path="/add-task" element={<PrivateRoute><AddTaskPage /></PrivateRoute>} />
+            <Route path="/edit/:id" element={<PrivateRoute><EditTaskPage /></PrivateRoute>} />
+            <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
+
+            {/* 404 fallback */}
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>

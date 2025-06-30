@@ -49,3 +49,8 @@ export function useAuth() {
   }
   return context;
 }
+
+export const useIsAdmin = () => {
+  const { user } = useAuth();
+  return user?.role === "ADMIN";
+};

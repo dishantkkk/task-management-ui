@@ -12,7 +12,7 @@ const ProfilePage = () => {
   const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
-    api.get("/user/me").then((res) => {
+    api.get("/users/me").then((res) => {
       setProfile(res.data);
       setForm({ name: res.data.name, email: res.data.email });
     });
