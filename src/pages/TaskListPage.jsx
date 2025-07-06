@@ -50,7 +50,7 @@ const TaskListPage = () => {
     if (!window.confirm("Are you sure you want to delete this task?")) return;
     try {
       await api.delete(`/tasks/${id}`);
-      setMessage("✅ Task deleted");
+      setMessage("Task deleted");
       fetchTasks();
       setSelectedTask(null);
       setTimeout(() => setMessage(""), 3000);
@@ -67,7 +67,7 @@ const TaskListPage = () => {
         value: "COMPLETED",
         status: "COMPLETED",
       });
-      setMessage("✅ Task marked complete");
+      setMessage("Task marked complete");
       fetchTasks();
       setSelectedTask(null);
       setTimeout(() => setMessage(""), 3000);

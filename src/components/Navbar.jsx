@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
 
 const Navbar = ({ darkMode, toggleDarkMode }) => {
-  const { token, logout, role } = useAuth(); // ✅ added role
+  const { token, logout, role } = useAuth();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 

@@ -50,7 +50,6 @@ export default function AdminDashboardPage() {
     <div className="min-h-screen p-6 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white">
       <h2 className="text-3xl font-bold mb-6 text-center">Admin Dashboard</h2>
 
-      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
         <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
           <h4 className="text-lg font-semibold">Total Users</h4>
@@ -66,7 +65,6 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* Task Pie Chart */}
       <div className="bg-white dark:bg-gray-800 p-6 rounded shadow">
         <h4 className="text-lg font-semibold mb-4">Task Status Distribution</h4>
         <div className="h-[300px]">

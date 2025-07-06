@@ -54,7 +54,6 @@ const RegisterPage = () => {
     try {
       await api.post("/auth/register", trimmedForm);
       setSuccessMsg("Registration successful! Please check your email to verify your account.");
-      // navigate("/login");
       setForm({
         name: "",
         username: "",
@@ -99,7 +98,6 @@ const RegisterPage = () => {
           </div>
         )}
 
-        {/* Name */}
         <label className="block text-sm font-medium mb-1 dark:text-gray-300">
           Full Name
         </label>
@@ -112,7 +110,6 @@ const RegisterPage = () => {
           className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-800 dark:text-white p-2 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
 
-        {/* Username */}
         <label className="block text-sm font-medium mb-1 dark:text-gray-300">
           Username
         </label>
@@ -125,7 +122,6 @@ const RegisterPage = () => {
           className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-800 dark:text-white p-2 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
 
-        {/* Email */}
         <label className="block text-sm font-medium mb-1 dark:text-gray-300">
           Email Address
         </label>
@@ -138,7 +134,6 @@ const RegisterPage = () => {
           className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-800 dark:text-white p-2 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
 
-        {/* Password */}
         <label className="block text-sm font-medium mb-1 dark:text-gray-300">
           Password
         </label>
@@ -152,7 +147,6 @@ const RegisterPage = () => {
           className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-800 dark:text-white p-2 rounded mb-2 focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
 
-        {/* Password strength meter */}
         {form.password && (
           <div className="mb-4">
             <div className="h-2 rounded-full bg-gray-300 dark:bg-gray-700 overflow-hidden">
@@ -166,7 +160,6 @@ const RegisterPage = () => {
           </div>
         )}
 
-        {/* Confirm Password */}
         <label className="block text-sm font-medium mb-1 dark:text-gray-300">
           Confirm Password
         </label>

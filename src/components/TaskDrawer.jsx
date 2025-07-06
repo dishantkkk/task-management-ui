@@ -22,19 +22,16 @@ const TaskDrawer = ({ task, onClose, onDelete, onMarkComplete }) => {
 
   return (
     <>
-      {/* Overlay */}
       <div
         className="fixed inset-0 bg-black/40 z-40"
         onClick={handleClose}
       />
 
-      {/* Drawer */}
       <div
         className={`fixed right-0 top-0 h-full w-[500px] bg-white dark:bg-gray-900 text-black dark:text-white shadow-lg z-50 transform transition-transform duration-500 ${isVisible ? "translate-x-0" : "translate-x-full"
           }`}
       >
         <div className="p-6 space-y-4 h-full flex flex-col">
-          {/* Header */}
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-bold">{task.title}</h2>
             <button
@@ -45,7 +42,6 @@ const TaskDrawer = ({ task, onClose, onDelete, onMarkComplete }) => {
             </button>
           </div>
 
-          {/* Task Info */}
           <p className="dark:text-gray-300">{task.description}</p>
           <p className="text-sm text-gray-500 dark:text-gray-400">
             <strong>Due:</strong> {new Date(task.dueDate).toLocaleString()}
@@ -54,7 +50,6 @@ const TaskDrawer = ({ task, onClose, onDelete, onMarkComplete }) => {
             <strong>Assigned To:</strong> {task.assignedToUsername || "You"}
           </p>
 
-          {/* Priority */}
           <p className="text-sm">
             <strong>Priority:</strong>{" "}
             <span
@@ -71,7 +66,6 @@ const TaskDrawer = ({ task, onClose, onDelete, onMarkComplete }) => {
             </span>
           </p>
 
-          {/* Status */}
           <p className="text-sm">
             <strong>Status:</strong>{" "}
             <span
@@ -86,7 +80,6 @@ const TaskDrawer = ({ task, onClose, onDelete, onMarkComplete }) => {
             </span>
           </p>
 
-          {/* Footer Buttons */}
           <div className="mt-auto flex justify-between gap-2">
             <button
               onClick={() => onDelete(task.id)}

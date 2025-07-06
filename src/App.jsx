@@ -28,7 +28,6 @@ const AdminDashboardPage = lazy(() => import("./pages/admin/AdminDashboardPage")
 const AdminUsersPage = lazy(() => import("./pages/admin/AdminUsersPage"));
 const AdminTasksPage = lazy(() => import("./pages/admin/AdminTasksPage"));
 
-// Page transition wrapper
 const AnimatedRoutes = () => {
   const location = useLocation();
 

@@ -12,18 +12,18 @@ const VerifyPage = () => {
   useEffect(() => {
     const token = params.get("token");
     if (!token) {
-      setStatus("❌ Invalid verification link.");
+      setStatus("Invalid verification link.");
       return;
     }
 
     api
       .get(`/auth/verify?token=${token}`)
       .then(() => {
-        setStatus("✅ Email verified successfully! Redirecting to login...");
+        setStatus("Email verified successfully! Redirecting to login...");
         setTimeout(() => navigate("/login"), 2500);
       })
       .catch(() => {
-        setStatus("❌ Verification failed or token expired.");
+        setStatus("Verification failed or token expired.");
       });
   }, [params, navigate]);
 

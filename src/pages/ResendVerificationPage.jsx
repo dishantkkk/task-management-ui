@@ -17,8 +17,8 @@ const ResendVerificationPage = () => {
 
     api
       .post("/auth/resend-verification", { email })
-      .then(() => setStatus("✅ Verification email sent successfully!"))
-      .catch(() => setStatus("❌ Failed to send verification email."));
+      .then(() => setStatus("Verification email sent successfully!"))
+      .catch(() => setStatus("Failed to send verification email."));
   }, [email]);
 
   return (
