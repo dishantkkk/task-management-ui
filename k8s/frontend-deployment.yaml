@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: task-management-ui-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: task-management-ui
+  template:
+    metadata:
+      labels:
+        app: task-management-ui
+    spec:
+      containers:
+        - name: task-management-ui
+          image: dishantkkk/task-management-ui:latest
+          ports:
+            - containerPort: 80
