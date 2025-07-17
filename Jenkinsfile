@@ -24,9 +24,9 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh '''
-                docker build -t ${FULL_IMAGE_NAME} .
+                docker build -t $FULL_IMAGE_NAME .
                 '''
-            }
+            }   
         }
 
         stage('Docker Push') {
