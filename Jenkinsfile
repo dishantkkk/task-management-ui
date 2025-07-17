@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "dishantkkk/task-management-ui"
-        IMAGE_TAG = "${BUILD_NUMBER}"
-        FULL_IMAGE_NAME = "${DOCKER_IMAGE}:${IMAGE_TAG}"
+        IMAGE_NAME = "dishantkkk/task-management-ui"
+        IMAGE_TAG = "${env.BUILD_NUMBER}"
+        FULL_IMAGE_NAME = "${IMAGE_NAME}:${IMAGE_TAG}"
     }
 
     stages {
@@ -23,47 +23,52 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh """
-                docker build -t ${FULL_IMAGE_NAME} -f Dockerfile .
-                """
+                sh '''
+                docker build -t ${FULL_IMAGE_NAME} .
+                '''
             }
         }
 
-        stage('Push to Docker Hub') {
+        stage('Docker Push') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-cred', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh """
-                    echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                    sh '''
+                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
                     docker push ${FULL_IMAGE_NAME}
-                    """
+                    '''
                 }
             }
         }
 
-        stage('Patch Deployment YAML') {
+        stage('Update Image Tag in k8s yaml') {
             steps {
-                sh """
+                sh '''
                 sed 's|image: dishantkkk/task-management-ui:.*|image: ${FULL_IMAGE_NAME}|' k8s/frontend-deployment.yaml > k8s/frontend-deployment-patched.yaml
-                """
+                '''
             }
         }
 
-        stage('Deploy to Kubernetes') {
+        stage('Deploy App (k8s)') {
             steps {
-                sh """
-                kubectl apply -f k8s/frontend-deployment-patched.yaml
-                kubectl apply -f k8s/frontend-service.yaml
-                """
+                echo "Deploying app using patched k8s yaml"
+                sh '''
+                    kubectl apply -f k8s/frontend-deployment-patched.yaml
+                    kubectl apply -f k8s/frontend-service.yaml
+                '''
             }
         }
     }
 
     post {
+        always {
+            echo "Cleaning up workspace..."
+            cleanWs()
+        }
         success {
-            echo "Frontend deployed successfully with image: ${FULL_IMAGE_NAME}"
+            echo '✅ Pipeline completed successfully'
         }
         failure {
-            echo "Frontend deployment failed"
+            echo '❌ Pipeline failed'
         }
     }
 }
