@@ -42,9 +42,9 @@ pipeline {
 
         stage('Update Image Tag in k8s yaml') {
             steps {
-                sh '''
+                sh """
                 sed 's|image: dishantkkk/task-management-ui:.*|image: ${FULL_IMAGE_NAME}|' k8s/frontend-deployment.yaml > k8s/frontend-deployment-patched.yaml
-                '''
+                """
             }
         }
 
