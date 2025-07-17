@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: task-management-ui
-          image: dishantkkk/task-management-ui:20250715203423
+          image: dishantkkk/task-management-ui:latest
           ports:
             - containerPort: 80
